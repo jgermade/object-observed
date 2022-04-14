@@ -2,6 +2,7 @@
 Object Observed
 ---------------
 
+[![npm version](https://badge.fury.io/js/object-observed.svg)](https://badge.fury.io/js/object-observed)
 [![Build Status](https://cloud.drone.io/api/badges/jgermade/object-observed/status.svg?ref=refs/heads/main)](https://cloud.drone.io/jgermade/object-observed)
 
 ``` sh
