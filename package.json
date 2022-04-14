@@ -1,10 +1,10 @@
 {
   "name": "object-observed",
   "version": "0.0.2",
-  "description": "",
-  "main": "index.js",
+  "description": "Object Observed",
+  "module": "src/object-observed.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "make test"
   },
   "author": "Jesús Germade <jesus@germade.dev>",
   "license": "ISC",
@@ -20,5 +20,18 @@
     "eslint-plugin-promise": "^6.0.0",
     "jest": "^27.5.1"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "main": "src/object-observed.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jgermade/object-observed.git"
+  },
+  "keywords": [
+    "object",
+    "observed"
+  ],
+  "bugs": {
+    "url": "https://github.com/jgermade/object-observed/issues"
+  },
+  "homepage": "https://github.com/jgermade/object-observed#readme"
 }
