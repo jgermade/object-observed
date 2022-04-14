@@ -25,6 +25,7 @@ jest: node_modules
 test: lint jest
 
 deploy:
+	git add --all
 	npm version ${NPM_VERSION}
 	git push --tags
 	npm publish
