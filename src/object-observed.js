@@ -1,12 +1,14 @@
 
+const isArray = Array.isArray
 const promise_resolved = Promise.resolve()
 export const nextTick = (fn = () => {}) => promise_resolved.then(fn)
 
 export function createObjectObserved (initial_object) {
   const listeners = {}
   const listeners_any = []
+
   const events_queue = []
-  let emit_nextTick = null
+  let emit_nextTick = true // disabled while initializing
 
   const nestedPath = (path, key) => path + (path ? '.' : '') + key
 
@@ -15,22 +17,22 @@ export function createObjectObserved (initial_object) {
     if (emit_nextTick) return
     
     emit_nextTick = nextTick(() => {
+      emit_nextTick = null
       events_queue.splice(0).forEach(([path, value]) => {
-        listeners[path]?.forEach(listener => listener(value))
+        listeners[path] && listeners[path].forEach(listener => listener(value))
         listeners_any.forEach(listener => listener(path, value))
       })
-      emit_nextTick = null
     })
   }
 
   function getObservedValue (value, path) {
-    if (Array.isArray(value)) return mapArrayObserved(value)
+    if (isArray(value)) return mapArrayObserved(value, path)
     if (typeof value === 'object') return mapOjectObserved(value, path)
     return value
   }
 
-  function mapArrayObserved (arr = [], path = '.') {
-    return new Proxy(arr.map((value, i) => getObservedValue(value, i)), {
+  function mapArrayObserved (arr = [], path = '') {
+    return new Proxy(arr.map((value, i) => getObservedValue(value, nestedPath(path, i))), {
       deleteProperty (obj, key) {
         delete obj[key]
         emitMutation(nestedPath(path, key), undefined)
@@ -60,25 +62,31 @@ export function createObjectObserved (initial_object) {
       },
     })
 
-    for (const key in src) oo[key] = src[key]
+    for (const key in src) oo[key] = getObservedValue(src[key], key)
 
     return oo
   }
 
-  const OO = mapOjectObserved(initial_object)
+  const OO = isArray(initial_object)
+    ? mapArrayObserved(initial_object)
+    : mapOjectObserved(initial_object)
+
   Object.defineProperty(OO, '$on', {
-    enumerable: false,
+    enumerable: true,
     configurable: false,
     writable: false,
     value: (event_name, listener) => (listeners[event_name] ??= []).push(listener)
   })
 
   Object.defineProperty(OO, '$onAny', {
-    enumerable: false,
+    enumerable: true,
     configurable: false,
     writable: false,
     value: (listener) => listeners_any.push(listener)
   })
+
+  emit_nextTick = null
+  events_queue.splice(0)
 
   return OO
 }

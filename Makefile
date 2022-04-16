@@ -24,7 +24,11 @@ jest: node_modules
 
 test: lint jest
 
-deploy:
+build: node_modules
+	mkdir -p dist
+	esbuild src/object-observed.js --bundle --platform=node --target=node10.4 > dist/object-observed.js
+
+deploy: build
 	git add --all
 	npm version ${NPM_VERSION}
 	git push --tags
