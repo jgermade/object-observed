@@ -1,6 +1,6 @@
 {
   "name": "object-observed",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Object Observed",
   "module": "src/object-observed.js",
   "scripts": {
