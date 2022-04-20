@@ -1,8 +1,33 @@
-const isArray = Array.isArray;
-const promise_resolved = Promise.resolve();
-export const nextTick = (fn = () => {
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+
+// src/object-observed.js
+var object_observed_exports = {};
+__export(object_observed_exports, {
+  createObjectObserved: () => createObjectObserved,
+  nextTick: () => nextTick
+});
+module.exports = __toCommonJS(object_observed_exports);
+var isArray = Array.isArray;
+var promise_resolved = Promise.resolve();
+var nextTick = (fn = () => {
 }) => promise_resolved.then(fn);
-export function createObjectObserved(initial_object) {
+function createObjectObserved(initial_object) {
   const listeners = {};
   const listeners_any = [];
   const events_queue = [];
@@ -113,3 +138,8 @@ export function createObjectObserved(initial_object) {
   events_queue.splice(0);
   return OO;
 }
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  createObjectObserved,
+  nextTick
+});

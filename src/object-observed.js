@@ -19,7 +19,7 @@ export function createObjectObserved (initial_object) {
     emit_nextTick = nextTick(() => {
       emit_nextTick = null
       events_queue.splice(0).forEach(([path, value]) => {
-        listeners[path] && listeners[path].forEach(listener => listener(value))
+        listeners[path]?.forEach(listener => listener(value))
         listeners_any.forEach(listener => listener(path, value))
       })
     })
@@ -71,18 +71,47 @@ export function createObjectObserved (initial_object) {
     ? mapArrayObserved(initial_object)
     : mapOjectObserved(initial_object)
 
-  Object.defineProperty(OO, '$on', {
-    enumerable: true,
-    configurable: false,
-    writable: false,
-    value: (event_name, listener) => (listeners[event_name] ??= []).push(listener)
-  })
-
-  Object.defineProperty(OO, '$onAny', {
-    enumerable: true,
-    configurable: false,
-    writable: false,
-    value: (listener) => listeners_any.push(listener)
+  Object.defineProperties(OO, {
+    $on: {
+      enumerable: true,
+      configurable: false,
+      writable: false,
+      value: (event_name, listener) => {
+        (listeners[event_name] ??= []).push(listener)
+        return OO
+      }
+    },
+    $off: {
+      enumerable: true,
+      configurable: false,
+      writable: false,
+      value: (event_name, listener) => {
+        const index = listeners[event_name]?.indexOf(listener) ?? -1
+        if (index === -1) return
+        listeners[event_name].splice(index, 1)
+        return OO
+      },
+    },
+    $onAny: {
+      enumerable: true,
+      configurable: false,
+      writable: false,
+      value: (listener) => {
+        listeners_any.push(listener)
+        return OO
+      },
+    },
+    $offAny: {
+      enumerable: true,
+      configurable: false,
+      writable: false,
+      value: (listener) => {
+        const index = listeners_any.indexOf(listener) ?? -1
+        if (index === -1) return
+        listeners_any.splice(index, 1)
+        return OO
+      },
+    },
   })
 
   emit_nextTick = null

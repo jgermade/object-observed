@@ -26,7 +26,8 @@ test: lint jest
 
 build: node_modules
 	mkdir -p dist
-	esbuild src/object-observed.js --bundle --platform=node --target=node10.4 > dist/object-observed.js
+	esbuild src/object-observed.js --platform=node --target=node10 > dist/object-observed.js
+	esbuild src/object-observed.js --bundle --platform=node --target=node10 > dist/object-observed.cjs.js
 
 deploy: build
 	git add --all

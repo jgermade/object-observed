@@ -2,7 +2,6 @@
   "name": "object-observed",
   "version": "0.0.6",
   "description": "Object Observed",
-  "module": "src/object-observed.js",
   "scripts": {
     "test": "make test"
   },
@@ -22,7 +21,8 @@
     "jest": "^27.5.1"
   },
   "dependencies": {},
-  "main": "dist/object-observed.js",
+  "module": "dist/object-observed.js",
+  "main": "dist/object-observed.cjs.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jgermade/object-observed.git"
