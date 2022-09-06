@@ -6,6 +6,9 @@ name: node14
 steps:
 - name: restore-cache
   image: drillster/drone-volume-cache
+  volumes:
+  - name: cache
+    path: /cache
   settings:
     restore: true
     mount:
@@ -23,7 +26,15 @@ steps:
 
 - name: rebuild-cache
   image: drillster/drone-volume-cache
+  volumes:
+  - name: cache
+    path: /cache
   settings:
     rebuild: true
     mount:
       - ./node_modules
+
+volumes:
+  - name: cache
+    host:
+      path: /tmp/cache
